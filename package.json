@@ -1,0 +1,16 @@
+{
+  "name": "transparency-crawler",
+  "version": "1.0.0",
+  "keywords": [
+    "crawler",
+    "fapeu",
+    "transparency"
+  ],
+  "bugs": {
+    "url": "https://github.com/felpin/transparency-crawler/issues"
+  },
+  "license": "MIT",
+  "author": "Felipe de Alencar Pinheiro <felipe.pinheiro.90@hotmail.com>",
+  "main": "index.js",
+  "repository": "https://github.com/felpin/transparency-crawler.git"
+}
