@@ -1,7 +1,7 @@
 const Crawler = require('crawler');
 
 const crawlNames = ($) => {
-  const names = [];
+  const names = new Set();
   const tableLines = $('font[size=0\\.5]')
     .first()
     .parent()
@@ -13,7 +13,7 @@ const crawlNames = ($) => {
     const name = $(tableLines[index]).children().eq(2).text();
 
     if (name && name !== 'Nome Empregado') {
-      names.push(name);
+      names.add(name);
     }
   }
 
