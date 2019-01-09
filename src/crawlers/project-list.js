@@ -17,7 +17,10 @@ const crawlProjectNumbers = ($) => {
 
 const projectListCrawler = new Crawler({
   callback: (error, res, done) => {
-    // TODO: When on error
+    if (error) {
+      console.log(error);
+      done();
+    }
 
     const { $ } = res;
 
