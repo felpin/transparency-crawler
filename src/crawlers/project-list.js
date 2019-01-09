@@ -1,6 +1,7 @@
 const Crawler = require('crawler');
 
-const { BASE_URL } = require('../constants');
+const { BASE_URL, BASE_CLT_URL } = require('../constants');
+const peopleCltCrawler = require('./people-clt');
 
 const crawlNextPage = $ => $('img[alt=Proximo]').parent().attr('href');
 
@@ -25,7 +26,7 @@ const projectListCrawler = new Crawler({
     const { $ } = res;
 
     const projectNumbers = crawlProjectNumbers($);
-    // TODO: Use the project numbers
+    projectNumbers.forEach(number => peopleCltCrawler.queue(`${BASE_CLT_URL}?wnuprojeto=${number}`));
 
     const nextPage = crawlNextPage($);
     if (nextPage) {
