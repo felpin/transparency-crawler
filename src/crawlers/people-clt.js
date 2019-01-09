@@ -1,5 +1,7 @@
 const Crawler = require('crawler');
 
+const result = new Map();
+
 const crawlNames = ($) => {
   const names = new Set();
   const tableLines = $('font[size=0\\.5]')
@@ -33,10 +35,17 @@ const peopleCltCrawler = new Crawler({
 
     const names = crawlNames($);
     const projectNumber = getProjectNumber(res.request.uri);
-    // TODO: Use the name and the project number
+
+    if (names.size) {
+      result.set(projectNumber, Array.from(names));
+    }
 
     done();
   },
 });
 
-module.exports = peopleCltCrawler;
+
+module.exports = {
+  crawler: peopleCltCrawler,
+  result,
+};
