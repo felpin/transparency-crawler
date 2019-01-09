@@ -1,5 +1,7 @@
 const Crawler = require('crawler');
 
+const { BASE_URL } = require('../constants');
+
 const crawlNextPage = $ => $('img[alt=Proximo]').parent().attr('href');
 
 const crawlProjectNumbers = ($) => {
@@ -20,9 +22,12 @@ const projectListCrawler = new Crawler({
     const { $ } = res;
 
     const projectNumbers = crawlProjectNumbers($);
-    const nextPage = crawlNextPage($);
+    // TODO: Use the project numbers
 
-    // TODO: Use the project numbers and the next page
+    const nextPage = crawlNextPage($);
+    if (nextPage) {
+      projectListCrawler.queue(`${BASE_URL}/${nextPage}`);
+    }
 
     done();
   },
