@@ -1,7 +1,5 @@
 const Crawler = require('crawler');
 
-const { BASE_URL } = require('../constants');
-
 const crawlNames = ($) => {
   const names = [];
   const tableLines = $('font[size=0\\.5]')
