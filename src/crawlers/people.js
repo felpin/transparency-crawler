@@ -1,50 +1,51 @@
 const Crawler = require('crawler');
 
-const result = new Map();
+module.exports = function createCrawler(configuration) {
+  const result = new Map();
 
-const crawlNames = ($) => {
-  const names = new Set();
-  const tableLines = $('font[size=0\\.5]')
-    .first()
-    .parent()
-    .parent()
-    .parent()
-    .children();
+  const crawlNames = ($) => {
+    const names = new Set();
+    const tableLines = $('font[size=0\\.5]')
+      .first()
+      .parent()
+      .parent()
+      .parent()
+      .children();
 
-  for (let index = 0; index < tableLines.length; index += 1) {
-    const name = $(tableLines[index]).children().eq(3).text();
+    for (let index = 0; index < tableLines.length; index += 1) {
+      const name = $(tableLines[index])
+        .children()
+        .eq(configuration.getPersonNameColumnNumber())
+        .text();
 
-    if (name && name !== 'Nome') {
-      names.add(name);
+      if (name && name !== configuration.getPersonColumnTitle()) {
+        names.add(name);
+      }
     }
-  }
 
-  return names;
-};
+    return names;
+  };
 
-const getProjectNumber = url => url.query.split('=')[1];
+  const getProjectNumber = url => url.query.split('=')[1];
 
-const peopleCrawler = new Crawler({
-  callback: (error, res, done) => {
-    if (error) {
-      console.log(error);
+  const crawler = new Crawler({
+    callback: (error, res, done) => {
+      if (error) {
+        done();
+      }
+
+      const { $ } = res;
+
+      const names = crawlNames($);
+      const projectNumber = getProjectNumber(res.request.uri);
+
+      if (names.size) {
+        result.set(projectNumber, Array.from(names));
+      }
+
       done();
-    }
+    },
+  });
 
-    const { $ } = res;
-
-    const names = crawlNames($);
-    const projectNumber = getProjectNumber(res.request.uri);
-
-    if (names.size) {
-      result.set(projectNumber, Array.from(names));
-    }
-
-    done();
-  },
-});
-
-module.exports = {
-  crawler: peopleCrawler,
-  result,
+  return { crawler, result };
 };
