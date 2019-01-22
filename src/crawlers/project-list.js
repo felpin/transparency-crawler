@@ -19,7 +19,6 @@ const crawlProjectNumbers = ($) => {
 const projectListCrawler = new Crawler({
   callback: (error, res, done) => {
     if (error) {
-      console.log(error);
       done();
     }
 
