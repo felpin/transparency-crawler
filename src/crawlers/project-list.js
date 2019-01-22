@@ -1,39 +1,45 @@
 const Crawler = require('crawler');
 
-const { BASE_URL, BASE_CLT_URL } = require('../constants');
-const { crawler: peopleCltCrawler } = require('./people-clt');
+const { BASE_URL, BASE_PEOPLE_URL, BASE_PEOPLE_CLT_URL } = require('../constants');
 
-const crawlNextPage = $ => $('img[alt=Proximo]').parent().attr('href');
+module.exports = function createCrawler(peopleCrawler, peopleCltCrawler) {
+  const crawlNextPage = $ => $('img[alt=Proximo]').parent().attr('href');
 
-const crawlProjectNumbers = ($) => {
-  const numbers = [];
-  const links = $('font[size=2] > a');
+  const crawlProjectNumbers = ($) => {
+    const numbers = [];
+    const links = $('font[size=2] > a');
 
-  for (let index = 0; index < links.length; index += 2) {
-    numbers.push($(links[index]).html());
-  }
+    for (let index = 0; index < links.length; index += 2) {
+      numbers.push($(links[index]).html());
+    }
 
-  return numbers;
-};
+    return numbers;
+  };
 
-const projectListCrawler = new Crawler({
-  callback: (error, res, done) => {
-    if (error) {
+  const crawler = new Crawler({
+    callback: (error, res, done) => {
+      if (error) {
+        done();
+      }
+
+      const { $ } = res;
+
+      const projectNumbers = crawlProjectNumbers($);
+      projectNumbers.forEach((number) => {
+        const urlParameters = `?wnuprojeto=${number}`;
+
+        peopleCrawler.queue(`${BASE_PEOPLE_URL}${urlParameters}`);
+        peopleCltCrawler.queue(`${BASE_PEOPLE_CLT_URL}${urlParameters}`);
+      });
+
+      const nextPage = crawlNextPage($);
+      if (nextPage) {
+        crawler.queue(`${BASE_URL}/${nextPage}`);
+      }
+
       done();
-    }
+    },
+  });
 
-    const { $ } = res;
-
-    const projectNumbers = crawlProjectNumbers($);
-    projectNumbers.forEach(number => peopleCltCrawler.queue(`${BASE_CLT_URL}?wnuprojeto=${number}`));
-
-    const nextPage = crawlNextPage($);
-    if (nextPage) {
-      projectListCrawler.queue(`${BASE_URL}/${nextPage}`);
-    }
-
-    done();
-  },
-});
-
-module.exports = projectListCrawler;
+  return crawler;
+};
