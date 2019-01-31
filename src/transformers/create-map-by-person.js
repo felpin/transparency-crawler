@@ -1,7 +1,7 @@
 module.exports = function createMapByPerson(mapByProject) {
   const mapByPerson = new Map();
 
-  mapByProject.forEach((project, people) => {
+  mapByProject.forEach((people, project) => {
     people.forEach((name) => {
       if (!mapByPerson.has(name)) {
         mapByPerson.set(name, []);
