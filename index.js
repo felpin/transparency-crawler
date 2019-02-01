@@ -1,5 +1,6 @@
 require('dotenv').config();
 const EventEmitter = require('events');
+const logger = require('pino')();
 
 const projectListCrawlerFactory = require('./src/crawlers/project-list');
 const peopleCrawlerConfiguration = require('./src/crawlers/configurations/people/people-configuration');
@@ -41,6 +42,8 @@ const TOTAL_CRAWLERS = 3;
   projectListCrawler.queue(`${BASE_URL}/swfwfap151`);
 
   projectListCrawler.on('drain', () => {
+    logger.info('Project list crawler drained');
+
     const createPeopleDrainHandler = (result, label) => async () => {
       const mapByPerson = createMapByPerson(result);
       await writeToMongoDb(mapByPerson, label);
@@ -48,8 +51,14 @@ const TOTAL_CRAWLERS = 3;
       drainEmitter.emit('drain');
     };
 
-    peopleCrawler.on('drain', createPeopleDrainHandler(peopleResult, 'people'));
-    peopleCltCrawler.on('drain', createPeopleDrainHandler(peopleCltResult, 'clt'));
+    peopleCrawler.on('drain', () => {
+      logger.info('People crawler drained');
+      createPeopleDrainHandler(peopleResult, 'people')();
+    });
+    peopleCltCrawler.on('drain', () => {
+      logger.info('People CLT crawler drained');
+      createPeopleDrainHandler(peopleCltResult, 'clt');
+    });
 
     drainEmitter.emit('drain');
   });
