@@ -1,24 +1,6 @@
-const { MongoClient } = require('mongodb');
 const logger = require('pino')();
 
-async function start() {
-  try {
-    const client = await MongoClient.connect('mongodb://localhost:32768/transparency', { useNewUrlParser: true });
-    return client.db();
-  } catch (error) {
-    logger.error(error);
-    throw error;
-  }
-}
-
-let _database;
-async function getDatabase() {
-  if (!_database) {
-    _database = await start();
-  }
-
-  return _database;
-}
+const { getDatabase } = require('../database/mongodb');
 
 async function writeOne(person, projects, label) {
   const database = await getDatabase();
