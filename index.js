@@ -10,8 +10,16 @@ const createMapByPerson = require('./src/transformers/create-map-by-person');
 const writeToMongoDb = require('./src/writers/mongodb');
 const { start: startDatabaseConnection, finish: finishDatabaseConnection } = require('./src/database/mongodb');
 
-const peopleCrawler = peopleCrawlerFactory(peopleCrawlerConfiguration);
-const peopleCltCrawler = peopleCrawlerFactory(peopleCltCrawlerConfiguration);
+const {
+  crawler: peopleCrawler,
+  result: peopleResult,
+} = peopleCrawlerFactory(peopleCrawlerConfiguration);
+
+const {
+  crawler: peopleCltCrawler,
+  result: peopleCltResult,
+} = peopleCrawlerFactory(peopleCltCrawlerConfiguration);
+
 const projectListCrawler = projectListCrawlerFactory(peopleCrawler, peopleCltCrawler);
 
 const TOTAL_CRAWLERS = 3;
@@ -40,8 +48,8 @@ const TOTAL_CRAWLERS = 3;
       drainEmitter.emit('drain');
     };
 
-    peopleCrawler.crawler.on('drain', createPeopleDrainHandler(peopleCrawler.result, 'clt'));
-    peopleCltCrawler.crawler.on('drain', createPeopleDrainHandler(peopleCltCrawler.result, 'people'));
+    peopleCrawler.on('drain', createPeopleDrainHandler(peopleResult, 'clt'));
+    peopleCltCrawler.on('drain', createPeopleDrainHandler(peopleCltResult, 'people'));
 
     drainEmitter.emit('drain');
   });
