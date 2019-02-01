@@ -1,4 +1,5 @@
 const Crawler = require('crawler');
+const logger = require('pino')();
 
 module.exports = function createCrawler(configuration) {
   const result = new Map();
@@ -33,6 +34,7 @@ module.exports = function createCrawler(configuration) {
   const crawler = new Crawler({
     callback: (error, res, done) => {
       if (error) {
+        logger.error(error);
         done();
       }
 

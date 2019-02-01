@@ -1,4 +1,5 @@
 const Crawler = require('crawler');
+const logger = require('pino')();
 
 const { BASE_URL, BASE_PEOPLE_URL, BASE_PEOPLE_CLT_URL } = require('../constants');
 
@@ -19,6 +20,7 @@ module.exports = function createCrawler(peopleCrawler, peopleCltCrawler) {
   const crawler = new Crawler({
     callback: (error, res, done) => {
       if (error) {
+        logger.error(error);
         done();
       }
 
