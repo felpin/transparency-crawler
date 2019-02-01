@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "crawler": "^1.2.0",
+    "dotenv": "^6.2.0",
     "mongodb": "^3.1.13",
     "pino": "^5.11.1"
   },
