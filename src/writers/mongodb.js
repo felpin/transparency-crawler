@@ -30,8 +30,6 @@ async function writeOne(person, projects, label) {
   } else {
     await collection.insertOne({ name: person, [label]: projects });
   }
-
-  logger.info(`Label ${label} saved for person ${person} successfully`);
 }
 
 module.exports = async function write(personMap, label) {
