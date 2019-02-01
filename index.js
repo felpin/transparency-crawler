@@ -48,8 +48,8 @@ const TOTAL_CRAWLERS = 3;
       drainEmitter.emit('drain');
     };
 
-    peopleCrawler.on('drain', createPeopleDrainHandler(peopleResult, 'clt'));
-    peopleCltCrawler.on('drain', createPeopleDrainHandler(peopleCltResult, 'people'));
+    peopleCrawler.on('drain', createPeopleDrainHandler(peopleResult, 'people'));
+    peopleCltCrawler.on('drain', createPeopleDrainHandler(peopleCltResult, 'clt'));
 
     drainEmitter.emit('drain');
   });
