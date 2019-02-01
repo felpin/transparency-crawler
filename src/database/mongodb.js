@@ -3,6 +3,8 @@ const logger = require('pino')();
 
 let client;
 async function start() {
+  if (client) return;
+
   try {
     client = await MongoClient.connect('mongodb://localhost:32768/transparency', { useNewUrlParser: true });
     logger.info('Connected to MongoDB successfully');
