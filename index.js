@@ -57,7 +57,7 @@ const TOTAL_CRAWLERS = 3;
     });
     peopleCltCrawler.on('drain', () => {
       logger.info('People CLT crawler drained');
-      createPeopleDrainHandler(peopleCltResult, 'clt');
+      createPeopleDrainHandler(peopleCltResult, 'clt')();
     });
 
     drainEmitter.emit('drain');
