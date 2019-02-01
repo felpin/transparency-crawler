@@ -16,7 +16,8 @@ module.exports = function createCrawler(configuration) {
       const name = $(tableLines[index])
         .children()
         .eq(configuration.getPersonNameColumnNumber())
-        .text();
+        .text()
+        .trim();
 
       if (name && name !== configuration.getPersonColumnTitle()) {
         names.add(name);
