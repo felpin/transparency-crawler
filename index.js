@@ -1,3 +1,4 @@
+require('dotenv').config();
 const EventEmitter = require('events');
 
 const projectListCrawlerFactory = require('./src/crawlers/project-list');
