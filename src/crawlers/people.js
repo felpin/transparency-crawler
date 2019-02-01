@@ -17,7 +17,8 @@ module.exports = function createCrawler(configuration) {
         .children()
         .eq(configuration.getPersonNameColumnNumber())
         .text()
-        .trim();
+        .trim()
+        .toUpperCase();
 
       if (name && name !== configuration.getPersonColumnTitle()) {
         names.add(name);
