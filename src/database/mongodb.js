@@ -6,7 +6,7 @@ async function start() {
   if (client) return;
 
   try {
-    client = await MongoClient.connect('mongodb://localhost:32768/transparency', { useNewUrlParser: true });
+    client = await MongoClient.connect('mongodb://localhost:27017/transparency', { useNewUrlParser: true });
     logger.info('Connected to MongoDB successfully');
   } catch (error) {
     logger.error(error);
