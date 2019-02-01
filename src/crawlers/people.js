@@ -21,7 +21,7 @@ module.exports = function createCrawler(configuration) {
         .trim()
         .toUpperCase();
 
-      if (name && name !== configuration.getPersonColumnTitle()) {
+      if (name && name !== configuration.getPersonColumnTitle().trim().toUpperCase()) {
         names.add(name);
       }
     }
