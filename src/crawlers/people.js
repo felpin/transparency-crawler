@@ -38,13 +38,15 @@ module.exports = function createCrawler(configuration) {
         done();
       }
 
-      const { $ } = res;
+      const { $, request: { uri }, statusCode } = res;
 
       const names = crawlNames($);
       const projectNumber = getProjectNumber(res.request.uri);
 
       if (names.size) {
         result.set(projectNumber, Array.from(names));
+      } else if (statusCode === 502) {
+        crawler.queue(uri.href);
       }
 
       done();
